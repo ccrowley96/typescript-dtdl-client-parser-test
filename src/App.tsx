@@ -1,16 +1,38 @@
 import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { ModelParserFactory, ModelParsingOption } from 'azure-iot-parser-node';
+import { createParser, ModelParsingOption, ParsingError } from '@azure/dtdl-parser';
 import TeslaModels from './DtdlModels/TeslaExampleModels.json';
 
-function App() {
+class DTDLModelParser {
+    static async parseStringModels(modelStrings: Array<string>) {
+        const modelParser = createParser(
+            ModelParsingOption.PermitAnyTopLevelElement
+        );
+        modelParser.options = ModelParsingOption.PermitAnyTopLevelElement;
+        const modelDict = await modelParser.parse(modelStrings);
+        console.log(modelDict);
+        return modelDict;
+    }
+}
 
+
+function App() {
   useEffect(() => {
     const parseModelsAsync = async () => {
-      const parser = ModelParserFactory.create(ModelParsingOption.PermitAnyTopLevelElement);
-      const modelDict = await parser.parse(TeslaModels.map(m => JSON.stringify(m)))
-      console.log(modelDict)
+      try {
+        const modelDict = await DTDLModelParser.parseStringModels(TeslaModels.map(m => JSON.stringify(m)))
+        console.log(modelDict)  
+      } catch (err: any) {
+        if (err._parsingErrors) {
+          const parsingErrors: Array<ParsingError> = err._parsingErrors;
+          console.log(parsingErrors)
+          
+        } else {
+          console.error(err);
+        }
+      }
+      
     }
 
     parseModelsAsync();

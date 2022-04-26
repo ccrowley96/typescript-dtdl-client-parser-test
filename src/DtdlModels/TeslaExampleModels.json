@@ -29,18 +29,8 @@
             },
             {
                 "@type": "Property",
-                "@id": "dtmi:com:cocrowle:batterydead;1",
-                "name": "BatteryDeadState",
-                "dtmi:dtdl:property:schema;2": "boolean",
-                "comment": "",
-                "description": "Battery state",
-                "displayName": "Battery dead",
-                "writable": true
-            },
-            {
-                "@type": "Property",
                 "@id": "dtmi:com:cocrowle:dateactivated;1",
-                "name": "DateActivated",
+                "name": "BatteryDeadState",
                 "schema": "date",
                 "comment": "",
                 "description": "Date car activated",
